@@ -1,0 +1,82 @@
+https://www.youtube.com/watch?v=EHQfPIvfe_o
+https://alertifyjs.com/guide.html
+git init
+git status
+git add .
+git commit -m "message"
+git remote add origin https://github.com/Araujo4594680/Mercado-Web.git
+git push -u origin master
+---------------------------------------------------------------------------------------
+git  status
+git add. 
+git commit -m "message"
+git push -u origin master
+---------------------------------------------------------------------------------------
+-
+TRIGGER'status
+---------------------------------------------------------------------------------------
+INSERT INTO historial_venta (idproducto,idusuario,usuario,nombre_producto,precio_producto,cantidad_comprada,total_pagar,fecha) VALUES 
+(309,474,'araujo0003','Papel',3.10,1,5.00,'2021-06-11')
+---------------------------------------------------------------------------------------
+CREATE TRIGGER actualizarStockVenta AFTER INSERT ON historial_venta FOR EACH ROW 
+UPDATE venta set cantidad_vender= cantidad_vender - new.cantidad_comprada
+where venta.idproducto=new.idproducto
+---------------------------------------------------------------------------------------
+CREATE TRIGGER actualizarStockProducto AFTER INSERT ON venta FOR EACH ROW 
+UPDATE producto set cantidad= cantidad - new.cantidad_vender
+where producto.idproducto=new.idproducto
+---------------------------------------------------------------------------------------
+CREATE TRIGGER devolverStockProducto AFTER DELETE ON venta FOR EACH ROW 
+UPDATE producto set cantidad= cantidad + old.cantidad_vender
+where producto.idproducto=old.idproducto
+---------------------------------------------------------------------------------------
+<td><img src=".'data:image/jpg;base64,'.base64_encode($reg->imagen)."></td>
+proyecto finalizado---
+
+funciotn verdatos(){
+            /*console.log(data);
+        	var datos = JSON.parse(data);
+			$("#idproductoimg").val(datos.idproducto);
+			$("#txtnombreimagen").val(datos.nombreproducto);
+			$("#txtcantidadimagen").val(datos.cantidad); 
+			$("#txtprecioimagen").val(datos.precioventa);
+            //$('#txtimagen').attr('src',datos.imagen);
+            $("#modal-imagen").modal('show');*/
+}
+
+// var id = $("#idproductoimg").val();
+ //   var nombre = $("#txtnombreimagen").val();
+  //  var cantidad = $("#txtcantidadimagen").val();
+  //  var precio = $("#txtprecioimagen").val();
+
+------------------------------
+
+  CONTROLADOR
+  require_once("../modelo/modeloImgProducto.php");
+$img = new  ModeloImgProducto();
+$reg = $img->obtenerImgProducto($_POST["idproducto"]);
+echo json_encode($reg);
+------------------------------------------
+CONTROLADOR 
+<?php
+require_once("../conex.php");
+$idProducto = $_POST['idproducto'];
+$sql="select p.idproducto,p.nombreproducto,p.cantidad,p.precioventa,i.idimagen,i.imagen
+   from producto p inner join imagen_producto i on i.idproducto=p.idproducto
+   where p.idproducto = $idProducto";
+   $rs=$cnx->query($sql) or die ("error $sql");
+   $json = array();
+   while($reg=$rs->fetchObject()){
+     $json[]=array(
+        'idproducto' => $reg->idproducto,
+        'nombreproducto' => $reg->nombreproducto,
+        'cantidad' => $reg->cantidad,
+        'precioVenta' => $reg->precioventa,
+        'idImagen' => $reg->idimagen,
+        'imagen' => base64_encode($reg->imagen)
+     );
+   }
+    echo json_encode($json);
+?>
+
+

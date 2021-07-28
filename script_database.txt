@@ -1,0 +1,94 @@
+﻿--------------------------------------------------------------------------------------------------------------------------------
+create DATABASE ing_web_tienda
+--------------------------------------------------------------------------------------------------------------------------------
+USE DATABASE ing_web_tienda
+--------------------------------------------------------------------------------------------------------------------------------
+create table administrador(
+idadministrador int primary key not null auto_increment,
+idusuario int not  null,
+tipo varchar(8) not null
+);
+--------------------------------------------------------------------------------------------------------------------------------
+create table categoria(
+idcategoria int primary key not null auto_increment,
+categoria varchar(20) not null
+);
+--------------------------------------------------------------------------------------------------------------------------------
+create table usuario(
+idusuario int primary key not null auto_increment,
+nombre varchar(30) not null,
+username varchar(30) not null,
+contraseña varchar(30) not null
+);
+
+--------------------------------------------------------------------------------------------------------------------------------
+create table producto (
+idproducto int primary key not null auto_increment,
+idusuario int not null,
+nombreproducto varchar (30) not null,
+preciocompra decimal(10,2) not null,
+precioventa decimal(10,2) not null,
+cantidad int not null,
+idcategoria int not null
+);
+--------------------------------------------------------------------------------------------------------------------------------
+create table imagen_producto(
+idimagen int primary key not null auto_increment,
+idproducto int not null,
+imagen longblob not null
+);
+--------------------------------------------------------------------------------------------------------------------------------
+create table venta(
+idventa int primary key not null auto_increment,
+idproducto int not null,
+fecha  date not null,
+hora time not null,
+cantidad_vender int not null
+);
+--------------------------------------------------------------------------------------------------------------------------------
+create table historial_compra(
+idhistorial int primary key not null auto_increment,
+idproducto int  not null,
+idusuario int not null,
+usuario varchar(20) not null,
+nombre_producto varchar(20) not null,
+precio_producto decimal(10,2) not null,
+cantidad_comprada int not null,
+total_pagar decimal(10,2) not null,
+fecha date not null
+);
+--------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------RELACIONES DE LA TABLAS---------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE administrador ADD  FOREIGN KEY(idusuario) REFERENCES usuario (idusuario) ON DELETE CASCADE ON UPDATE CASCADE;
+--------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE producto ADD FOREIGN KEY (idcategoria) REFERENCES categoria(idcategoria) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE producto ADD FOREIGN KEY (idusuario) REFERENCES usuario(idusuario) ON DELETE CASCADE ON UPDATE CASCADE;
+--------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE imagen_producto ADD FOREIGN KEY (idproducto) REFERENCES producto(idproducto) ON DELETE CASCADE ON UPDATE CASCADE;
+--------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE venta ADD FOREIGN KEY (idproducto) REFERENCES producto(idproducto) ON DELETE CASCADE ON UPDATE CASCADE;
+--------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE historial_compra ADD FOREIGN KEY (idusuario) REFERENCES usuario(idusuario) ON DELETE CASCADE ON UPDATE CASCADE;
+---------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------INSERT-------------------------------------------------------------
+INSERT INTO categoria (categoria) VALUES('Otros');
+INSERT INTO categoria (categoria) VALUES('Lacteo');
+INSERT INTO categoria (categoria) VALUES('Abarrotes');
+INSERT INTO categoria (categoria) VALUES('Conservas');
+--------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------TRIGGER'S------------------------------------------------------------
+CREATE TRIGGER actualizarStockVenta AFTER INSERT ON historial_compra FOR EACH ROW 
+UPDATE venta set cantidad_vender= cantidad_vender - new.cantidad_comprada
+where venta.idproducto=new.idproducto
+--------------------------------------------------------------------------------------------------------------------------------
+CREATE TRIGGER actualizarStockProducto AFTER INSERT ON venta FOR EACH ROW 
+UPDATE producto set cantidad= cantidad - new.cantidad_vender
+where producto.idproducto=new.idproducto
+--------------------------------------------------------------------------------------------------------------------------------
+CREATE TRIGGER devolverStockProducto AFTER DELETE ON venta FOR EACH ROW 
+UPDATE producto set cantidad= cantidad + old.cantidad_vender
+where producto.idproducto=old.idproducto
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
