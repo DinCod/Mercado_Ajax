@@ -96,3 +96,8 @@ async function upload(){
  }
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dauz6sio9/image/upload'
 const CLOUDINARY_UPLOAD_PRESET = 'pkuivlae';
+-------------------------------------------------------------------------------
+npm init -y
+npm i cloudinary  node.js
+
+
