@@ -78,5 +78,26 @@ $sql="select p.idproducto,p.nombreproducto,p.cantidad,p.precioventa,i.idimagen,i
    }
     echo json_encode($json);
 ?>
+------------------------------------------------------------------------------------
+async function upload(){
+  var image = document.getElementById('img-uploader').files[0];
+  console.log(image);
+  const formData = new FormData();
+  formData.append('file', image);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+  // Send to cloudianry
+  const res = await axios.post(CLOUDINARY_URL,formData);
+  console.log(res);
+  var url = res.data.secure_url;
+  var id  = res.data.public_id;
+  console.log(id,url);
+  //sent var to ajax
+ }
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dauz6sio9/image/upload'
+const CLOUDINARY_UPLOAD_PRESET = 'pkuivlae';
+-------------------------------------------------------------------------------
+npm init -y
+npm i cloudinary  node.js
 
 
