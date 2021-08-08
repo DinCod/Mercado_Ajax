@@ -54,7 +54,7 @@ if($dato==null){ header("Location: form-login.php"); }else{ if($tipe==null){ ech
    <br>
     <form enctype="multipart/form-data"> 
        <h3 class="subtittle1">Poner Productos a la venta </h3>
-       <h6 class="subtittle2">Lista de Productos del Almacen</h6>
+       <h6 class="subtittle2">Lista de Productos del Almacen <br> Sin imagenes</h6>
        <!-- combo box -->
 	   <select name="combo" id="combo" class="selectproducto">
       

@@ -20,7 +20,6 @@ nombre varchar(30) not null,
 username varchar(30) not null,
 contraseña varchar(30) not null
 );
-
 --------------------------------------------------------------------------------------------------------------------------------
 create table producto (
 idproducto int primary key not null auto_increment,

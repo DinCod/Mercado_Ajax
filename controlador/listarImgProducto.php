@@ -18,24 +18,23 @@ while($reg=$rs->fetchObject()){
                 <td>$reg->cantidad</td>
                 <td class='column'>s/$reg->precioventa</td>
                 <td><img src=".'data:image/jpg;base64,'.base64_encode($reg->imagen)."></td>
-		            <td colspan='3'>
+		              <td colspan='3'>
                   <button class='btn btn-info' type='button' onclick='verdatosImg($reg->idproducto)'>Editar</button>
                   <button class='btn btn-danger' type='button' onclick='eliminarImg($reg->idproducto)'>Eliminar</button>
                 ";
-                require_once("../conex.php");
                 $venta="SELECT * FROM venta WHERE idproducto='$reg->idproducto'";    
                 $rsul = $cnx->query($venta);
-                if($rsul->rowCount() > 0){
+                if($rsul->rowCount() == 1){
                   $result.="
                   <button class='btn btn-dark' type='button'  onclick='cancelarVenta($reg->idproducto)'>Cancelar Venta</button>					
-                </td>
-                </tr>";
+                
+                ";
                 }
                if($rsul->rowCount() == 0){
                   $result.="
                   <button class='btn btn-success' type='button'  onclick='verProductoVenta($reg->idproducto)'>Vender</button>					
-                </td>
-                </tr>";
+              
+                ";
                 }		
   }
 }

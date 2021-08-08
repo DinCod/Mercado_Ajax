@@ -42,7 +42,8 @@ public function setCantidad($cantidad){
 public function listarComboBox(){
    require_once("../conex.php");
    $usuario= $_SESSION['usuario'];
-   $sql= "SELECT nombreproducto,idproducto,username FROM usuario inner join producto on usuario.idusuario=producto.idusuario where username='$usuario'";
+   $sql= "SELECT p.nombreproducto,p.idproducto,u.username from producto  p INNER JOIN usuario u on u.idusuario=p.idusuario
+   where u.username='$usuario' and  not EXISTS(SELECT * from imagen_producto  i where i.idproducto=p.idproducto)";
    $rs=$cnx->query($sql);
    return $rs;
 }
